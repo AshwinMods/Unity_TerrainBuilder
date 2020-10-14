@@ -45,26 +45,37 @@ public class AshTerrainPainterEditor : Editor
 			switch (e.keyCode)
 			{
 				case KeyCode.BackQuote:
-					exp_Tool = !exp_Tool;
+					exp_Tool = !exp_Tool; 
+					EditorUtility.SetDirty(target);
 					break;
 				case KeyCode.B:
-					brushMode = !brushMode;
+					brushMode = !brushMode; 
+					EditorUtility.SetDirty(target);
+					break;
+				case KeyCode.T:
+					exp_Tex = !exp_Tex;
+					EditorUtility.SetDirty(target);
 					break;
 				case KeyCode.LeftBracket:
 					stroke_Size -= 1;
+					EditorUtility.SetDirty(target);
 					break;
 				case KeyCode.RightBracket:
 					stroke_Size += 1;
+					EditorUtility.SetDirty(target);
 					break;
 				case KeyCode.Minus:
 				case KeyCode.KeypadMinus:
 					stroke_Value -= 0.1f;
+					EditorUtility.SetDirty(target);
 					break;
 				case KeyCode.Plus:
 				case KeyCode.Equals:
 				case KeyCode.KeypadPlus:
 					stroke_Value += 0.1f;
+					EditorUtility.SetDirty(target);
 					break;
+					/*
 				case KeyCode.Alpha1:
 				case KeyCode.Keypad1:
 					Select_Texure(1);
@@ -81,6 +92,7 @@ public class AshTerrainPainterEditor : Editor
 				case KeyCode.Keypad4:
 					Select_Texure(4);
 					break;
+					*/
 			}
 		}
 	}
@@ -100,6 +112,8 @@ public class AshTerrainPainterEditor : Editor
 		GUILayout.Space(10);
 		if (GUILayout.Button("Export SpatialMap")) Export_SpatialMap();
 		GUILayout.EndHorizontal();
+
+		PainterWindow(0);
 	}
 	int maxWidth, maxHeight;
 
@@ -108,13 +122,14 @@ public class AshTerrainPainterEditor : Editor
 		if (!tool) tool = (target as AshTerrainPainter);
 		maxWidth = Camera.current.pixelWidth;
 		maxHeight = Camera.current.pixelHeight;
-
+		/*
 		Handles.BeginGUI();
 		GUI.color = new Color(1, 1, 1, 0.3f);
 		GUILayout.BeginArea(Rect.zero);
 		GUILayout.Window(987654, new Rect(10, 30, 0, 0), PainterWindow, "Terrain Painter");
 		GUILayout.EndArea();
 		Handles.EndGUI();
+		*/
 		HandleEvents();
 	}
 	int t_Box = 100;
@@ -138,7 +153,7 @@ public class AshTerrainPainterEditor : Editor
 			if (brushMode)
 			{
 				GUILayout.Space(5);
-				stroke_Value = EditorGUILayout.Slider("Opacity +,-", stroke_Value, 0.1f, 2f);
+				stroke_Value = EditorGUILayout.Slider("Opacity +,-", stroke_Value, 0.1f, 1f);
 				GUILayout.Space(5);
 				stroke_Size = EditorGUILayout.Slider("Size [,]", stroke_Size, 1f, 500f);
 			}
