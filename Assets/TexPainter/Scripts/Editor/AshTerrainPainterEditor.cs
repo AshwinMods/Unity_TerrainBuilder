@@ -22,18 +22,16 @@ public class AshTerrainPainterEditor : Editor
 		if (brushMode && e.isMouse && e.button == 0)
 		{
 			var mp = e.mousePosition;
-			mp.y = Screen.height - (mp.y + 40);
 			switch (e.type)
 			{
 				case EventType.MouseDown:
 				case EventType.MouseDrag:
-					var ray = Camera.current.ScreenPointToRay(mp);
+					var ray = HandleUtility.GUIPointToWorldRay(mp);
 					RaycastHit rHit;
 					if (Physics.Raycast(ray, out rHit))
 					{
 						tool.ApplyStroke(rHit.textureCoord, stroke_Channel, stroke_Value * (e.shift ? -1 : 1), stroke_Size);
-						var cid = GUIUtility.GetControlID(FocusType.Passive);
-						GUIUtility.hotControl = cid;
+						GUIUtility.hotControl = GUIUtility.GetControlID(FocusType.Passive);
 						Event.current.Use();
 					}
 					break;

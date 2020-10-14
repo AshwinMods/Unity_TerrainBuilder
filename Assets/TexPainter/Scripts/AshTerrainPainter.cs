@@ -40,13 +40,34 @@ public class AshTerrainPainter : MonoBehaviour
 	public void ApplyStroke(Vector2 offset, Vector4 channelMul, float multiplier = 1, float scale = 1f)
 	{
 		var pass = multiplier < 0 ? 1 : 0;
-		matStroke.SetVector("_Mul", channelMul * Mathf.Abs(multiplier));
 		var l_offset = -offset * (spatialMap_Res/scale) + Vector2.one * 0.5f;
 		var l_scale = Vector2.one * (spatialMap_Res / scale);
 		matStroke.SetTextureOffset("_BrushTex", l_offset);
 		matStroke.SetTextureScale("_BrushTex", l_scale);
 		matStroke.SetTexture("_BrushTex", brush);
+
+		var mul = channelMul * Mathf.Abs(multiplier);
+		matStroke.SetVector("_Mul", mul);
 		Graphics.Blit(brush, spatialMap, matStroke, pass);
+
+		var inv = Vector4.zero; 
+		if (mul.z > 0)
+		{
+			inv.w = mul.z;
+		} else if (mul.y > 0)
+		{
+			inv.z = mul.y;
+			inv.w = mul.y;
+		}else if (mul.x > 0)
+		{
+			inv = Vector4.one * mul.x;
+			inv.x = 0;
+		}
+		if (inv != Vector4.zero)
+		{
+			matStroke.SetVector("_Mul", inv);
+			Graphics.Blit(brush, spatialMap, matStroke, 1);
+		}
 	}
 
 	public bool Get_TexCoord_At_WorldPos(Vector3 wPos, out Vector3 tc)
