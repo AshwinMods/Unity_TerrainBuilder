@@ -47,9 +47,16 @@ public class AshTerrainPainter : MonoBehaviour
 		matStroke.SetTexture("_BrushTex", brush);
 
 		var mul = channelMul * Mathf.Abs(multiplier);
+		if (mul == Vector4.zero)
+		{
+			mul = Vector4.one;
+			pass = 1;
+		}
 		matStroke.SetVector("_Mul", mul);
 		Graphics.Blit(brush, spatialMap, matStroke, pass);
 
+		if (mul == Vector4.one) 
+			return;
 		var inv = Vector4.zero; 
 		if (mul.z > 0)
 		{
